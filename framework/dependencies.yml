@@ -67,7 +67,7 @@ require:    &allDependencies
     - org.hibernate -> hibernate-ehcache 5.4.1.Final
     - com.mchange -> mchange-commons-java 0.2.12
     - org.javassist -> javassist 3.24.0-GA
-    - io.netty -> netty 3.10.6.Final
+    - io.netty -> netty 3.10.7.Final-SNAPSHOT
     - org.postgresql -> postgresql 42.2.4
     - org.slf4j -> slf4j-api 1.7.22
     - org.slf4j -> slf4j-log4j12 1.7.22

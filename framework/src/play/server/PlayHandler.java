@@ -362,7 +362,7 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
         Map<String, Http.Cookie> cookies = response.cookies;
 
         for (Http.Cookie cookie : cookies.values()) {
-            Cookie c = new DefaultCookie(cookie.name, cookie.value);
+            DefaultCookie c = new DefaultCookie(cookie.name, cookie.value);
             c.setSecure(cookie.secure);
             c.setPath(cookie.path);
             if (cookie.domain != null) {
@@ -372,6 +372,7 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
                 c.setMaxAge(cookie.maxAge);
             }
             c.setHttpOnly(cookie.httpOnly);
+            c.setSameSite(cookie.sameSite);
             nettyResponse.headers().add(SET_COOKIE, ServerCookieEncoder.STRICT.encode(c));
         }
 
@@ -675,6 +676,10 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
                     playCookie.secure = cookie.isSecure();
                     playCookie.value = cookie.value();
                     playCookie.httpOnly = cookie.isHttpOnly();
+                    if (cookie instanceof DefaultCookie) {
+                        DefaultCookie dCookie = (DefaultCookie) cookie;
+                        playCookie.sameSite = dCookie.sameSite();
+                    }
                     cookies.put(playCookie.name, playCookie);
                 }
             }
@@ -779,7 +784,7 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
 
                 Map<String, Http.Cookie> cookies = response.cookies;
                 for (Http.Cookie cookie : cookies.values()) {
-                    Cookie c = new DefaultCookie(cookie.name, cookie.value);
+                    DefaultCookie c = new DefaultCookie(cookie.name, cookie.value);
                     c.setSecure(cookie.secure);
                     c.setPath(cookie.path);
                     if (cookie.domain != null) {
@@ -789,6 +794,7 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
                         c.setMaxAge(cookie.maxAge);
                     }
                     c.setHttpOnly(cookie.httpOnly);
+                    c.setSameSite(cookie.sameSite);
 
                     nettyResponse.headers().add(SET_COOKIE, ServerCookieEncoder.STRICT.encode(c));
                 }
