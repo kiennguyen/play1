@@ -6,18 +6,12 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.handler.codec.http.cookie.CookieHeaderNames.SameSite;
 
 import com.google.gson.Gson;
 
@@ -163,6 +157,8 @@ public class Http {
          * See http://www.owasp.org/index.php/HttpOnly
          */
         public boolean httpOnly = false;
+
+        public SameSite sameSite;
     }
 
     /**
@@ -752,6 +748,10 @@ public class Http {
         }
 
         public void setCookie(String name, String value, String domain, String path, Integer maxAge, boolean secure, boolean httpOnly) {
+            setCookie(name, value, domain, path, maxAge, secure, false, SameSite.None.toString());
+        }
+
+        public void setCookie(String name, String value, String domain, String path, Integer maxAge, boolean secure, boolean httpOnly, String sameSite) {
             path = Play.ctxPath + path;
             if (cookies.containsKey(name) && cookies.get(name).path.equals(path)
                     && ((cookies.get(name).domain == null && domain == null) || (cookies.get(name).domain.equals(domain)))) {
@@ -773,6 +773,7 @@ public class Http {
                 if (maxAge != null) {
                     cookie.maxAge = maxAge;
                 }
+                cookie.sameSite = SameSite.of(sameSite);
                 cookies.put(name, cookie);
             }
         }

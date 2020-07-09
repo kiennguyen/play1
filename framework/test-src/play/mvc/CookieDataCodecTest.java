@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jboss.netty.handler.codec.http.cookie.Cookie;
+import org.jboss.netty.handler.codec.http.cookie.DefaultCookie;
 import org.jboss.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import org.junit.Test;
 
@@ -182,6 +183,10 @@ public class CookieDataCodecTest {
                 playCookie.secure = cookie.isSecure();
                 playCookie.value = cookie.value();
                 playCookie.httpOnly = cookie.isHttpOnly();
+                if (cookie instanceof DefaultCookie) {
+                    DefaultCookie dCookie = (DefaultCookie) cookie;
+                    playCookie.sameSite = dCookie.sameSite();
+                }
             }
         }
 
